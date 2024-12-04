@@ -1,17 +1,28 @@
 from rest_framework import permissions
 
 
-class IsSuperUserOrIsAdminOnly(permissions.BasePermission):
+class IsAdminOnly(permissions.BasePermission):
     """
     Предоставляет права на осуществление запросов
-    только суперпользователю Джанго, админу Джанго или
-    аутентифицированному пользователю с ролью admin.
+    только c правами администратора
     """
 
     def has_permission(self, request, view):
         return (
             request.user.is_authenticated
-            and (request.user.is_superuser
-                 or request.user.is_staff
-                 or request.user.is_admin)
+            and (request.user.is_staff)
+        )
+
+
+class IsAdminorIsModerorIsSuperUser(permissions.BasePermission):
+    """
+    Представляет права доступа людям с админскими правами
+    и модератерам.
+    """
+
+    def has_permission(self, request, view):
+        return (
+            request.user.is_authenticated
+            and (request.user.is_staff
+                 or request.user.moderator)
         )
