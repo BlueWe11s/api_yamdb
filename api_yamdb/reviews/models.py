@@ -26,6 +26,7 @@ class Category(models.Model):
     )
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
@@ -42,6 +43,7 @@ class Genre(models.Model):
     )
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
 
@@ -57,7 +59,6 @@ class Title(models.Model):
     )
     genre = models.ManyToManyField(
         Genre,
-        through='Genre',
         verbose_name='Жанр'
     )
     description = models.TextField("Описание произведения")
@@ -71,6 +72,7 @@ class Title(models.Model):
     )
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
 
@@ -99,6 +101,7 @@ class Review(models.Model):
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     class Meta:
+        ordering = ['pub_date']
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
 
@@ -123,6 +126,7 @@ class Comment(models.Model):
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     class Meta:
+        ordering = ['pub_date']
         verbose_name = 'Комментрий'
         verbose_name_plural = 'Комментарии'
 
