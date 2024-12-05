@@ -70,6 +70,11 @@ class Title(models.Model):
         related_name='titles',
         verbose_name='Категория'
     )
+    average_rating = models.FloatField(
+        # Высчитывается сигналами в отдельном файле.
+        'Средний рейтинг',
+        default=0,
+    )
 
     class Meta:
         ordering = ['name']
