@@ -10,14 +10,14 @@ class IsAdminOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         return (
             request.user.is_authenticated
-            and (request.user.is_staff)
+            and request.user.is_staff
         )
 
 
 class IsAdminorIsModerorIsSuperUser(permissions.BasePermission):
     """
     Представляет права доступа людям с админскими правами
-    и модератерам.
+    и модераторам.
     """
 
     def has_permission(self, request, view):
@@ -25,4 +25,17 @@ class IsAdminorIsModerorIsSuperUser(permissions.BasePermission):
             request.user.is_authenticated
             and (request.user.is_staff
                  or request.user.moderator)
+        )
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    """
+    Представляет права доступа людям с админскими правами
+    остальным позволяет читать
+    """
+
+    def has_permission(self, request, view):
+        return (
+            request.method in permissions.SAFE_METHODS
+            or (request.user.is_authenticated and request.user.is_admin)
         )

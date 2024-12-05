@@ -6,17 +6,6 @@ from django.utils import timezone
 User = get_user_model()
 
 
-class Users(models.Model):
-    role = models.CharField('Заголовок', max_length=20)
-    username = models.SlugField('Уникальный идентификатор', unique=True)
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='Пользователь',
-        related_name='user'
-    )
-
-
 class Category(models.Model):
     name = models.CharField('Наименование', max_length=200)
     slug = models.SlugField(
