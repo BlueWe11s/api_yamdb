@@ -10,21 +10,26 @@ class IsAdminOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         return (
             request.user.is_authenticated
-            and request.user.is_staff
+            and request.user.is_admin
         )
 
 
 class IsAdminorIsModerorIsSuperUser(permissions.BasePermission):
     """
-    Представляет права доступа людям с админскими правами
-    и модераторам.
+    Представляет права доступа людям к объекту
     """
 
     def has_permission(self, request, view):
         return (
-            request.user.is_authenticated
-            and (request.user.is_staff
-                 or request.user.moderator)
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_authenticated
+        )
+
+    def has_object_permission(self, request, view, obj):
+        return (
+            request.method in permissions.SAFE_METHODS
+            or obj.author == request.user
+            or request.user.is_staff
         )
 
 
