@@ -70,7 +70,7 @@ class Title(models.Model):
         related_name='titles',
         verbose_name='Категория'
     )
-    average_rating = models.FloatField(
+    average_rating = models.IntegerField(
         # Высчитывается сигналами в отдельном файле.
         'Средний рейтинг',
         default=0,
