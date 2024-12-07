@@ -41,7 +41,7 @@ class UserSignupView(APIView):
     отправляется код на почту
     """
     def post(self, request):
-        serializer = SignupSerializer
+        serializer = SignupSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         response_data = {
@@ -70,7 +70,7 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
-    
+
 
 class ObtainTokenView(APIView):
     """Класс для запроса на получение токена."""
