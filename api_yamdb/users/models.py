@@ -11,13 +11,19 @@ class Users(AbstractUser):
         'Логин', max_length=50, unique=True,
     )
     role = models.CharField(
-        'Роль', choices=ROLE_CHOICES, default=USER
+        'Роль', max_length=50, choices=ROLE_CHOICES, default=USER
     )
     email = models.EmailField(
         'Почта', max_length=320, unique=True
     )
     confirmation_code = models.CharField(
-        'Код подтверждения', blank=True
+        'Код подтверждения', max_length=50, blank=True
+    )
+    bio = models.TextField(
+        'Биография',
+        max_length=2000,
+        blank=True,
+        null=True,
     )
 
     class Meta:
