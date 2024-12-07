@@ -1,14 +1,15 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from users.validators import validate_username
 
 class Users(AbstractUser):
     USER = 'user'
-    MODERATOR = 'mpderator'
+    MODERATOR = 'moderator'
     ADMIN = 'admin'
-    ROLE_CHOICES = (USER, MODERATOR, ADMIN)
+    ROLE_CHOICES = ((USER, 'user'), (MODERATOR, 'moderator'), (ADMIN, 'admin'))
     username = models.CharField(
-        'Логин', max_length=50, unique=True,
+        'Логин', max_length=50, unique=True, validators=[validate_username]
     )
     role = models.CharField(
         'Роль', max_length=50, choices=ROLE_CHOICES, default=USER
@@ -36,7 +37,9 @@ class Users(AbstractUser):
 
     @property
     def is_admin(self):
-        return self.role == self.is_superuser or self.is_staff
+        return (self.role == self.ADMIN
+                or self.is_superuser
+                or self.is_staff)
 
     def __str__(self):
         return self.username

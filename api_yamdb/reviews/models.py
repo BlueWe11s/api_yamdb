@@ -25,10 +25,10 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField('Наименование', max_length=200)
+    name = models.CharField('Наименование', max_length=150)
     slug = models.SlugField(
         'Уникальный идентификатор',
-        max_length=200,
+        max_length=50,
         unique=True
     )
 

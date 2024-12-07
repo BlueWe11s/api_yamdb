@@ -1,14 +1,19 @@
+from django.contrib.auth import get_user_model
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.views import APIView
 
 from reviews.models import Category, Genre, Review, Title
+from api.mixins import ListCreateDestroyViewSet
 from api.filters import TitleFilter
 from api.permissions import (IsAdminOnly,
-                          IsAdminorIsModerorIsSuperUser)
+                          IsAdminorIsModerorIsSuperUser, IsAdminOrReadOnly)
 from api.serializers import (
     TitleSerializer,
     CategorySerializer,
@@ -20,14 +25,6 @@ from api.serializers import (
     ObtainTokenSerializer,
     SignupSerializer
 )
-from api.mixins import ListCreateDestroyViewSet
-
-from django.contrib.auth import get_user_model
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from users.models import Users
 
 User = get_user_model()
 
@@ -41,7 +38,7 @@ class UserSignupView(APIView):
     отправляется код на почту
     """
     def post(self, request):
-        serializer = SignupSerializer(data=request.data)
+        serializer = SignupSerializer
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         response_data = {
@@ -85,20 +82,22 @@ class ObtainTokenView(APIView):
 class CategoryViewSet(ListCreateDestroyViewSet, viewsets.GenericViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAdminOnly]
+    permission_classes = [IsAdminOrReadOnly]
+    pagination_class = LimitOffsetPagination
 
 
 class GenreViewSet(ListCreateDestroyViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [IsAdminOnly]
+    permission_classes = [IsAdminOrReadOnly]
+    pagination_class = LimitOffsetPagination
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.annotate(
         rating=Avg('reviews__score')).order_by('rating')
     serializer_class = TitleSerializer
-    permission_classes = [IsAdminOnly]
+    permission_classes = [IsAdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [DjangoFilterBackend]
     filterset_class = TitleFilter

@@ -5,11 +5,13 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from reviews.models import Title, Category, Genre, Review, Comment
+from users.models import Users
 from api.utils import send_conformaton_mail
 from users.validators import validate_username
-from reviews.models import Category, Comment, Genre, Review, Title, Users
 
-User = get_user_model()
+
+User = Users
 
 
 class SignupSerializer(serializers.Serializer):
