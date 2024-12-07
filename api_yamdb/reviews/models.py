@@ -1,27 +1,17 @@
-from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 
-User = get_user_model()
+from users.models import Users
 
-
-class Users(models.Model):
-    role = models.CharField('Заголовок', max_length=20)
-    username = models.SlugField('Уникальный идентификатор', unique=True)
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='Пользователь',
-        related_name='user'
-    )
+User = Users
 
 
 class Category(models.Model):
-    name = models.CharField('Наименование', max_length=200)
+    name = models.CharField('Наименование', max_length=256)
     slug = models.SlugField(
         'Уникальный идентификатор',
-        max_length=200,
+        max_length=256,
         unique=True
     )
 
