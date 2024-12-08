@@ -34,7 +34,7 @@ class AuthSerializer(serializers.Serializer):
 
 class TokenSerializer(serializers.Serializer):
     """
-    Сериализатор для обработки 
+    Сериализатор для обработки
     """
     username = serializers.CharField()
     confirmation_code = serializers.CharField()

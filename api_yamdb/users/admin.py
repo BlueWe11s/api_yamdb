@@ -12,4 +12,10 @@ class UsersAdmin(UserAdmin):
     list_display = ('username', 'email', 'role', 'bio',)
     search_fields = ('username', 'role', 'email',)
     list_display_links = ('username',)
-    list_filter = ('role', 'username', 'is_staff', 'if_superuser', 'is_active',)
+    list_filter = (
+        'role',
+        'username',
+        'is_staff',
+        'if_superuser',
+        'is_active',
+        )
