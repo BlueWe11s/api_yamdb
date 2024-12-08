@@ -13,6 +13,6 @@ def validate_username(value):
     if not re.match(pattern, value):
         invalid_chars = re.sub(pattern, '', value)
         raise ValidationError(
-            f'Введите корректный юзернейм. '
+            f'Введите корректный юзернейм.'
             f'Эти символы недопустимы: {invalid_chars}'
         )

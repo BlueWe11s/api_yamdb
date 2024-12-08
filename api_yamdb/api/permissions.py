@@ -2,6 +2,10 @@ from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
 class IsAdminOrReadOnly(BasePermission):
+    """
+    Права на выполнение действий для админа
+    и разрешенный просмотр для остальных
+    """
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
@@ -12,6 +16,9 @@ class IsAdminOrReadOnly(BasePermission):
 
 
 class IsAdminorIsModerorIsSuperUser(BasePermission):
+    """
+    Права на редактирование всем кроме анона
+    """
     def has_permission(self, request, view):
         return request.method in SAFE_METHODS or request.user.is_authenticated
 
@@ -33,6 +40,9 @@ class IsAdminorIsModerorIsSuperUser(BasePermission):
 
 
 class IsAdminOnly(BasePermission):
+    """
+    Права на выполнение администратором и суперюзером
+    """
     def has_permission(self, request, view):
         return (
             request.user.is_authenticated
