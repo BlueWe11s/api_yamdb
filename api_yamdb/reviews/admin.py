@@ -36,7 +36,7 @@ class TitleAdmin(admin.ModelAdmin):
     '''
     Админка произведений
     '''
-    list_display = ('name', 'year','description', 'category')
+    list_display = ('name', 'year', 'description', 'category')
     list_display_links = ('name',)
     search_fields = ('name', 'year', 'description', 'category')
     list_filter = ('name', 'description')
