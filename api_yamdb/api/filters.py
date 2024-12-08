@@ -3,9 +3,9 @@ from reviews.models import Title
 
 
 class TitleFilter(FilterSet):
-    '''
-    Фильтр для модели Title
-    '''
+    """
+    Класс фильтра для вьюсета произведения
+    """
     name = CharFilter(lookup_expr='icontains')
     genre = CharFilter(field_name='genre__slug')
     category = CharFilter(field_name='category__slug')

@@ -7,9 +7,9 @@ class ListCreateDestroyViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet
 ):
-    '''
-    Представление для работы с моделями
-    '''
+    """
+    Наследуемый класс
+    """
     lookup_field = 'slug'
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
