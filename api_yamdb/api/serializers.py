@@ -1,15 +1,18 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import IntegrityError
 from django.db.models import Avg
 from rest_framework import serializers
 from reviews.models import Category, Comment, Genre, Review, Title
-from users.models import Users
 from users.validators import validate_username
 
-User = Users
+User = get_user_model()
 
 
 class AuthSerializer(serializers.Serializer):
+    """
+    Сериализатор для обработки запроса на получени кода подтверждения
+    """
     email = serializers.EmailField(required=True, max_length=254)
     username = serializers.CharField(
         required=True, max_length=150,
@@ -30,11 +33,17 @@ class AuthSerializer(serializers.Serializer):
 
 
 class TokenSerializer(serializers.Serializer):
+    """
+    Сериализатор для обработки 
+    """
     username = serializers.CharField()
     confirmation_code = serializers.CharField()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели пользователя
+    """
     class Meta:
         model = User
         fields = (
@@ -48,6 +57,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели отзыва
+    """
     author = serializers.SlugRelatedField(
         read_only=True, default=serializers.CurrentUserDefault(),
         slug_field='username',
@@ -72,6 +84,9 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели комментария
+    """
     author = serializers.SlugRelatedField(
         read_only=True, default=serializers.CurrentUserDefault(),
         slug_field='username',
@@ -87,6 +102,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели категории
+    """
     class Meta:
         model = Category
         fields = (
@@ -96,6 +114,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class GenreSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели жанра
+    """
     class Meta:
         model = Genre
         fields = (
@@ -105,6 +126,9 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class ListDetailedTitleSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели подсчета среднего рейтинга
+    """
     genre = GenreSerializer(many=True)
     category = CategorySerializer()
     rating = serializers.SerializerMethodField()
@@ -130,6 +154,9 @@ class ListDetailedTitleSerializer(serializers.ModelSerializer):
 
 
 class TitleSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели произведения
+    """
     genre = serializers.SlugRelatedField(
         slug_field='slug', many=True, queryset=Genre.objects.all()
     )
