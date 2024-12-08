@@ -3,6 +3,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import IntegrityError
 from django.db.models import Avg
 from rest_framework import serializers
+
 from reviews.models import Category, Comment, Genre, Review, Title
 from users.validators import validate_username
 
@@ -96,9 +97,6 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ('id', 'author', 'text', 'pub_date', 'review')
         read_only_fields = ('author', 'review', 'pub_date')
-
-    def create(self, validated_data):
-        return Comment.objects.create(**validated_data)
 
 
 class CategorySerializer(serializers.ModelSerializer):

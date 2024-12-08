@@ -9,7 +9,7 @@ def validate_username(value):
     '''
     Проверка корректности юзернейма
     '''
-    if value.lower() == "me":
+    if value == "me":
         raise ValidationError(
             "Вы не можете выбрать никнейм 'me', "
             "выберите другой никнейм.")

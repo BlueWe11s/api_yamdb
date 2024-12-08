@@ -2,7 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 
-from .validators import validate_username
+from users.validators import validate_username
+from reviews.constants import SLUG_LENGTH, EMAIL_LENGTH
 
 
 class Users(AbstractUser):
@@ -15,18 +16,18 @@ class Users(AbstractUser):
     ROLE_CHOICES = ((USER, 'user'), (MODERATOR, 'moderator'), (ADMIN, 'admin'))
     username = models.CharField(
         'Логин',
-        max_length=50,
+        max_length=SLUG_LENGTH,
         unique=True,
         validators=(validate_username, UnicodeUsernameValidator())
     )
     email = models.EmailField(
         'Почта',
-        max_length=254,
+        max_length=EMAIL_LENGTH,
         unique=True,
     )
     role = models.CharField(
         'Роль',
-        max_length=50,
+        max_length=SLUG_LENGTH,
         choices=ROLE_CHOICES,
         default=USER,
     )
@@ -34,9 +35,6 @@ class Users(AbstractUser):
         'Биография',
         blank=True,
         null=True,
-    )
-    bio = models.CharField(
-        'Биография', max_length=1200, null=True
     )
 
     class Meta:

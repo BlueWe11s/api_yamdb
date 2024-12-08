@@ -111,14 +111,12 @@ class UserViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-class CategoryViewSet(ListCreateDestroyViewSet, viewsets.GenericViewSet):
+class CategoryViewSet(ListCreateDestroyViewSet):
     '''
     Работа с категориями
     '''
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = PageNumberPagination
 
 
 class GenreViewSet(ListCreateDestroyViewSet):
@@ -127,8 +125,6 @@ class GenreViewSet(ListCreateDestroyViewSet):
     """
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = PageNumberPagination
 
 
 class TitleViewSet(viewsets.ModelViewSet):
