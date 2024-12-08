@@ -88,7 +88,7 @@ class Review(models.Model):
         verbose_name='Произведение'
     )
     text = models.TextField('Текст отзыва')
-    author = models.ForeignKey(
+    author = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         unique=True,

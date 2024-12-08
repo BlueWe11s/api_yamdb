@@ -16,6 +16,5 @@ class UsersAdmin(UserAdmin):
         'role',
         'username',
         'is_staff',
-        'if_superuser',
         'is_active',
     )
