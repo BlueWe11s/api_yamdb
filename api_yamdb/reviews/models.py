@@ -1,17 +1,19 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-
 from users.models import Users
 
 User = Users
 
 
 class Category(models.Model):
-    name = models.CharField('Наименование', max_length=256)
+    '''
+    Категории
+    '''
+    name = models.CharField('Наименование', max_length=150)
     slug = models.SlugField(
         'Уникальный идентификатор',
-        max_length=256,
+        max_length=50,
         unique=True
     )
 
@@ -25,10 +27,13 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField('Наименование', max_length=200)
+    '''
+    Жанры
+    '''
+    name = models.CharField('Наименование', max_length=150)
     slug = models.SlugField(
         'Уникальный идентификатор',
-        max_length=200,
+        max_length=50,
         unique=True
     )
 
@@ -42,7 +47,10 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    name = models.CharField('Наименование', max_length=100)
+    '''
+    Произведения
+    '''
+    name = models.CharField('Наименование', max_length=256)
     year = models.PositiveSmallIntegerField(
         'Год выпуска',
         validators=[MaxValueValidator(timezone.now().year)]
@@ -55,7 +63,6 @@ class Title(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
-        blank=True,
         null=True,
         related_name='titles',
         verbose_name='Категория'
@@ -71,6 +78,9 @@ class Title(models.Model):
 
 
 class Review(models.Model):
+    '''
+    Отзывы
+    '''
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -81,6 +91,7 @@ class Review(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        unique=True,
         related_name='review',
         verbose_name='Автор отзыва'
     )
@@ -100,6 +111,9 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
+    '''
+    Комментарии
+    '''
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,

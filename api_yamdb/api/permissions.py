@@ -1,46 +1,50 @@
-from rest_framework import permissions
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
-class IsAdminOnly(permissions.BasePermission):
+class IsAdminOrReadOnly(BasePermission):
     """
-    Предоставляет права на осуществление запросов
-    только c правами администратора
+    Права на выполнение действий для админа
+    и разрешенный просмотр для остальных
     """
-
     def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
         return (
             request.user.is_authenticated
             and request.user.is_admin
         )
 
 
-class IsAdminorIsModerorIsSuperUser(permissions.BasePermission):
+class IsAdminorIsModerorIsSuperUser(BasePermission):
     """
-    Представляет права доступа людям к объекту
+    Права на редактирование всем кроме анона
     """
-
     def has_permission(self, request, view):
-        return (
-            request.method in permissions.SAFE_METHODS
-            or request.user.is_authenticated
-        )
+        return request.method in SAFE_METHODS or request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        if (
+            request.user.is_authenticated
+            and (
+                request.user.is_admin
+                or request.user.is_moderator
+            )
+        ):
+            return True
         return (
-            request.method in permissions.SAFE_METHODS
-            or obj.author == request.user
-            or request.user.is_staff
+            request.method in ('PUT', 'PATCH', 'DELETE')
+            and obj.author == request.user
         )
 
 
-class IsAdminOrReadOnly(permissions.BasePermission):
+class IsAdminOnly(BasePermission):
     """
-    Представляет права доступа людям с админскими правами
-    остальным позволяет читать
+    Права на выполнение администратором и суперюзером
     """
-
     def has_permission(self, request, view):
         return (
-            request.method in permissions.SAFE_METHODS
-            or (request.user.is_authenticated and request.user.is_admin)
+            request.user.is_authenticated
+            and request.user.is_admin
         )
