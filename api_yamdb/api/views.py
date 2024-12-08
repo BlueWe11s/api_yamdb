@@ -27,6 +27,9 @@ User = get_user_model()
 
 
 class UserSignupView(APIView):
+    '''
+    Регистрация нового пользователя
+    '''
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
@@ -48,6 +51,9 @@ class UserSignupView(APIView):
 
 
 class ObtainTokenView(TokenObtainPairView):
+    '''
+    Получение токена
+    '''
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
@@ -69,6 +75,9 @@ class ObtainTokenView(TokenObtainPairView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    '''
+    Работа с пользователями
+    '''
     serializer_class = UserSerializer
     queryset = User.objects.order_by('pk')
     permission_classes = (IsAdminOnly,)
@@ -103,6 +112,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class CategoryViewSet(ListCreateDestroyViewSet, viewsets.GenericViewSet):
+    '''
+    Работа с категориями
+    '''
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -110,6 +122,9 @@ class CategoryViewSet(ListCreateDestroyViewSet, viewsets.GenericViewSet):
 
 
 class GenreViewSet(ListCreateDestroyViewSet):
+    """
+    Работа с жанрами
+    """
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -117,6 +132,9 @@ class GenreViewSet(ListCreateDestroyViewSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
+    '''
+    Работа с произведениями
+    '''
     http_method_names = ['get', 'delete', 'post', 'head', 'options', 'patch']
     queryset = Title.objects.order_by('pk')
     permission_classes = (IsAdminOrReadOnly,)
@@ -130,6 +148,9 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
+    '''
+    Работа с отзывами
+    '''
     http_method_names = ['get', 'delete', 'post', 'head', 'options', 'patch']
     serializer_class = ReviewSerializer
     permission_classes = (IsAdminorIsModerorIsSuperUser,)
@@ -157,6 +178,9 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    '''
+    Работа с комментариями
+    '''
     http_method_names = ['get', 'delete', 'post', 'head', 'options', 'patch']
     serializer_class = CommentSerializer
     permission_classes = (IsAdminorIsModerorIsSuperUser,)

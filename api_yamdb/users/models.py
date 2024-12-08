@@ -6,6 +6,9 @@ from .validators import validate_username
 
 
 class Users(AbstractUser):
+    '''
+    Пользователи
+    '''
     USER = 'user'
     MODERATOR = 'moderator'
     ADMIN = 'admin'

@@ -7,6 +7,9 @@ User = Users
 
 
 class Category(models.Model):
+    '''
+    Категории
+    '''
     name = models.CharField('Наименование', max_length=150)
     slug = models.SlugField(
         'Уникальный идентификатор',
@@ -24,6 +27,9 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
+    '''
+    Жанры
+    '''
     name = models.CharField('Наименование', max_length=150)
     slug = models.SlugField(
         'Уникальный идентификатор',
@@ -41,6 +47,9 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
+    '''
+    Произведения
+    '''
     name = models.CharField('Наименование', max_length=256)
     year = models.PositiveSmallIntegerField(
         'Год выпуска',
@@ -69,6 +78,9 @@ class Title(models.Model):
 
 
 class Review(models.Model):
+    '''
+    Отзывы
+    '''
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -99,6 +111,9 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
+    '''
+    Комментарии
+    '''
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,

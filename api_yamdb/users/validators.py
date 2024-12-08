@@ -6,6 +6,9 @@ pattern = r'^[\w.@+-]+\Z'
 
 
 def validate_username(value):
+    '''
+    Проверка корректности юзернейма
+    '''
     if value.lower() == "me":
         raise ValidationError(
             "Вы не можете выбрать никнейм 'me', "
