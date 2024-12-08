@@ -18,4 +18,4 @@ class UsersAdmin(UserAdmin):
         'is_staff',
         'if_superuser',
         'is_active',
-        )
+    )
