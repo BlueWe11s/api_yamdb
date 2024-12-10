@@ -35,7 +35,6 @@ class UserSignupView(APIView):
     def post(self, request):
         serializer = AuthSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         user = User.objects.get(
             username=request.data.get('username'),
             email=request.data.get('email')
@@ -84,6 +83,7 @@ class UserViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=username',)
     pagination_class = PageNumberPagination
+    http_method_names=['get', 'delete', 'post', 'patch']
 
     @action(
         methods=['GET', 'PATCH'], detail=False, url_path='me',
@@ -95,7 +95,7 @@ class UserViewSet(viewsets.ModelViewSet):
             data=request.data,
             partial=True
         )
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             if self.request.method == 'PATCH':
                 serializer.validated_data.pop('role', None)
             serializer.save()
@@ -103,11 +103,6 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(
             serializer.errors, status=status.HTTP_400_BAD_REQUEST
         )
-
-    def update(self, request, *args, **kwargs):
-        if request.method == 'PUT':
-            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return super().update(request, *args, **kwargs)
 
 
 class CategoryViewSet(ListCreateDestroyViewSet):
@@ -151,15 +146,18 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminorIsModerorIsSuperUser,)
     pagination_class = PageNumberPagination
 
-    def get_queryset(self):
-        title = get_object_or_404(
+    def object_title(self):
+        return get_object_or_404(
             Title,
             id=self.kwargs.get('title_id')
         )
+
+    def get_queryset(self):
+        title = self.object_title()
         return title.reviews.all()
 
     def perform_create(self, serializer):
-        title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
+        title = self.object_title()
         review = Review.objects.filter(title=title, author=self.request.user)
         if self.request.method == 'POST':
             if review:
@@ -181,16 +179,16 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminorIsModerorIsSuperUser,)
     pagination_class = PageNumberPagination
 
-    def get_queryset(self):
-        review = get_object_or_404(
+    def object_review(self):
+        return get_object_or_404(
             Review.objects.filter(title_id=self.kwargs.get('title_id')),
             pk=self.kwargs.get('review_id')
         )
+
+    def get_queryset(self):
+        review = self.object_review()
         return review.comments.all()
 
     def perform_create(self, serializer):
-        review = get_object_or_404(
-            Review.objects.filter(title_id=self.kwargs.get('title_id')),
-            pk=self.kwargs.get('review_id')
-        )
+        review = self.object_review()
         serializer.save(author=self.request.user, review=review)
