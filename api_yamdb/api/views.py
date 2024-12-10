@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
@@ -83,7 +84,7 @@ class UserViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=username',)
     pagination_class = PageNumberPagination
-    http_method_names=['get', 'delete', 'post', 'patch']
+    http_method_names = ['get', 'delete', 'post', 'patch']
 
     @action(
         methods=['GET', 'PATCH'], detail=False, url_path='me',
@@ -126,7 +127,8 @@ class TitleViewSet(viewsets.ModelViewSet):
     Работа с произведениями
     '''
     http_method_names = ['get', 'delete', 'post', 'head', 'options', 'patch']
-    queryset = Title.objects.order_by('pk')
+    queryset = Title.objects.order_by('pk').annotate(
+        rating=Avg('reviews__score'))
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter

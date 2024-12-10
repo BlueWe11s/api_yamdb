@@ -129,14 +129,7 @@ class ListDetailedTitleSerializer(serializers.ModelSerializer):
     """
     genre = GenreSerializer(many=True)
     category = CategorySerializer()
-    rating = serializers.SerializerMethodField()
-
-    def get_rating(self, obj):
-        rating = Review.objects.filter(title=obj).aggregate(
-            Avg('score'))['score__avg']
-        if rating:
-            return int(rating)
-        return None
+    rating = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Title

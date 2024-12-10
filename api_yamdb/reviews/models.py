@@ -23,6 +23,9 @@ class Category(models.Model):
         ordering = ['name']
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+        indexes = [
+            models.Index(fields=['slug']),
+        ]
 
     def __str__(self):
         return self.name
@@ -43,6 +46,9 @@ class Genre(models.Model):
         ordering = ['name']
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
+        indexes = [
+            models.Index(fields=['slug']),
+        ]
 
     def __str__(self):
         return self.name
