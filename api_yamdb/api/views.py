@@ -34,20 +34,21 @@ class UserSignupView(APIView):
 
     def post(self, request):
         serializer = AuthSerializer(data=request.data)
-        if serializer.is_valid():
-            user = User.objects.get(
-                username=request.data.get('username'),
-                email=request.data.get('email')
-            )
-            confirmation_code = default_token_generator.make_token(user)
-            send_mail(
-                'Код подтверждения',
-                f'Ваш код - {confirmation_code}',
-                settings.SENDER_EMAIL,
-                [request.data.get('email')]
-            )
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+
+        user = User.objects.get(
+            username=request.data.get('username'),
+            email=request.data.get('email')
+        )
+        confirmation_code = default_token_generator.make_token(user)
+        send_mail(
+            'Код подтверждения',
+            f'Ваш код - {confirmation_code}',
+            settings.SENDER_EMAIL,
+            [request.data.get('email')]
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 class ObtainTokenView(TokenObtainPairView):
