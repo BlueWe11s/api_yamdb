@@ -8,9 +8,9 @@ from rest_framework.pagination import PageNumberPagination
 
 from reviews.models import Category, Genre, Review, Title
 
-from api_yamdb.api.reviews.filters import TitleFilter
-from api_yamdb.api.reviews.mixins import ListCreateDestroyViewSet
-from api_yamdb.api.users.permissions import (
+from api.reviews.filters import TitleFilter
+from api.reviews.mixins import ListCreateDestroyViewSet
+from api.users.permissions import (
     IsAdminorIsModerorIsSuperUser,
     IsAdminOrReadOnly)
 from api.reviews.serializers import (
