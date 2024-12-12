@@ -77,7 +77,7 @@ class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'delete', 'post', 'patch']
 
     @action(
-        methods=['GET', 'PATCH'], detail=False, url_path='me',
+        methods=['GET'], detail=False, url_path='me',
         permission_classes=(permissions.IsAuthenticated,)
     )
     def get_update_me(self, request):
@@ -87,8 +87,21 @@ class UserViewSet(viewsets.ModelViewSet):
             partial=True
         )
         if serializer.is_valid(raise_exception=True):
-            if self.request.method == 'PATCH':
-                serializer.validated_data.pop('role', None)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            serializer.errors, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @get_update_me.mapping.patch
+    def patch_me(self, request):
+        serializer = self.get_serializer(
+            request.user,
+            data=request.data,
+            partial=True
+        )
+        if serializer.is_valid(raise_exception=True):
+            serializer.validated_data.pop('role', None)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(
