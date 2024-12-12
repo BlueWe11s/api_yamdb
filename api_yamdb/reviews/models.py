@@ -76,7 +76,6 @@ class Title(models.Model):
     )
     description = models.TextField("Описание произведения")
 
-
     class Meta:
         ordering = ['name']
         verbose_name = 'Произведение'

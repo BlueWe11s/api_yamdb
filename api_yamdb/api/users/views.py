@@ -12,7 +12,9 @@ from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.users.permissions import (IsAdminOnly)
-from api.users.serializers import (AuthSerializer, TokenSerializer, UserSerializer)
+from api.users.serializers import (AuthSerializer,
+                                   TokenSerializer,
+                                   UserSerializer)
 
 User = get_user_model()
 
