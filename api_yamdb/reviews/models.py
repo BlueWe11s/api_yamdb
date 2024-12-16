@@ -93,14 +93,12 @@ class Review(models.Model):
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
-        related_name='reviews',
         verbose_name='Произведение'
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         unique=True,
-        related_name='review',
         verbose_name='Автор отзыва'
     )
     text = models.TextField('Текст отзыва')
@@ -111,6 +109,7 @@ class Review(models.Model):
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     class Meta:
+        default_related_name = 'reviews'
         ordering = ['pub_date']
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
@@ -126,19 +125,18 @@ class Comment(models.Model):
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
-        related_name='comments',
         verbose_name='Отзыв'
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='comments',
         verbose_name='Автор'
     )
     text = models.TextField('Комментарий')
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     class Meta:
+        default_related_name = 'comments'
         ordering = ['pub_date']
         verbose_name = 'Комментрий'
         verbose_name_plural = 'Комментарии'

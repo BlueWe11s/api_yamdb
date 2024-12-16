@@ -34,8 +34,7 @@ class IsAdminorIsModerorIsSuperUser(BasePermission):
         ):
             return True
         return (
-            request.method in ('PUT', 'PATCH', 'DELETE')
-            and obj.author == request.user
+            obj.author == request.user
         )
 
 

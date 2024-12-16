@@ -80,11 +80,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         title = self.object_title()
         review = Review.objects.filter(title=title, author=self.request.user)
-        if self.request.method == 'POST':
-            if review:
-                raise PermissionDenied(
-                    'Вы уже оставляли отзыва на это произведение.'
-                )
+        if review.exists():
+            raise PermissionDenied(
+                'Вы уже оставляли отзыва на это произведение.'
+            )
         serializer.save(author=self.request.user, title=title)
 
     def get_serializer_context(self):
